@@ -26,9 +26,20 @@ form.addEventListener("submit", (e) => {
   }
 });
 
-socket.on("chat message", (msg) => {
+socket.on("chat message", (data) => {
   const item = document.createElement("li");
-  item.textContent = msg;
+
+  // if it's a string, show as-is
+  if (typeof data === "string") {
+    item.textContent = data;
+  }
+  // if it's an object, try to show `msg` field
+  else if (typeof data === "object" && data.msg) {
+    item.textContent = data.msg;
+  } else {
+    item.textContent = JSON.stringify(data);
+  }
+
   messages.appendChild(item);
   messages.scrollTop = messages.scrollHeight;
 });
